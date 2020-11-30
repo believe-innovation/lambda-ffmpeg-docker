@@ -11,7 +11,7 @@ You'll need Docker installed
 ### Copy over compiled binaries to your Lambda package
 
 ```bash
-id=$(docker create nicka/lambda-ffmpeg)
+docker build . -t lambda-ffmpeg && id=$(docker create lambda-ffmpeg)
 docker cp $id:/ffmpeg/binaries ../REPLACEME
 docker cp $id:/usr/bin/ffmpeg ../REPLACEME/
 docker cp $id:/usr/bin/ffprobe ../REPLACEME/
