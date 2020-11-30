@@ -23,8 +23,9 @@ RUN ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" \
 # the H.264/MPEG-4 AVC compression format, and is released under the terms of
 # the GNU GPL.
 WORKDIR ~/ffmpeg_sources
-RUN git clone --depth 1 git://git.videolan.org/x264
-WORKDIR x264
+RUN curl -o x264-master.tar.gz  https://code.videolan.org/videolan/x264/-/archive/master/x264-master.tar.gz
+RUN tar -xzf x264-master.tar.gz
+WORKDIR x264-master
 RUN PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" \
 ./configure \
 --prefix="$HOME/ffmpeg_build" \
@@ -68,7 +69,7 @@ RUN ./configure \
 
 # Opus - a totally open, royalty-free, highly versatile audio codec.
 WORKDIR ~/ffmpeg_sources
-RUN git clone --depth 1 git://git.opus-codec.org/opus
+RUN git clone --depth 1 https://github.com/xiph/opus.git
 WORKDIR opus
 RUN autoreconf -fiv
 RUN PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" \
@@ -115,7 +116,7 @@ RUN PATH="$HOME/bin:$PATH" \
 
 # Libav(Avconv) - a fork of FFMpeg
 WORKDIR ~/ffmpeg_sources
-RUN git clone -b release/3.1 git://git.ffmpeg.org/ffmpeg
+RUN git clone -b release/4.3 git://git.ffmpeg.org/ffmpeg
 WORKDIR ffmpeg
 RUN PATH="$HOME/bin:$PATH" \
 PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" \
@@ -158,7 +159,7 @@ RUN ./copy-binaries.sh $(which ffmpeg) /ffmpeg/binaries
 RUN ./copy-binaries.sh $(which ffprobe) /ffmpeg/binaries
 
 # Test objects
-WORKDIR /
+#WORKDIR /tmp
 COPY test-object.sh .
 RUN chmod +x test-object.sh
 
